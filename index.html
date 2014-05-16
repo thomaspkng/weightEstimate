@@ -1,0 +1,152 @@
+<html>
+<head>
+<title>Weight Estimation</title>
+<script type="text/javascript" src="phonegap.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+<script>
+function init() {
+	$(document).ready(function(){
+		//alert("OK");
+		$("input[name=unitin]").change(displayunitinchange);
+		$("#checkbtn").click(estimate);
+		});
+	}
+function displayunitinchange() {
+	unitin = $("input[name=unitin]:checked").val();
+	$(".unitdisplayin").html(unitin);
+	}
+function estimate() {
+	valunitin = $("input[name=unitin]:checked").val();
+	valunitout = $("input[name=unitout]:checked").val();
+	lenl = $("input[name=leng]").val();
+	widw = $("input[name=widt]").val();
+	thkt = $("input[name=heig]").val();
+	matl = $("#material").val();
+	if(isNaN(lenl) || isNaN(widw) || isNaN(thkt)) {alert("Entries is INVALID");} 
+	else {
+		platevolume = Number(lenl) * Number(widw) * Number(thkt);
+		switch (valunitin) {
+			case "mm":
+				ratioin = 1e-9;
+				break;
+			case "cm":
+				ratioin = 1e-6;
+				break;
+			case "m":
+				ratioin = 1;
+				break;
+			case "inch":
+				ratioin = 1.63871e-5;
+				break;
+			}
+		switch (valunitout) {
+			case "kg":
+				ratioout = 1;
+				reunit = "kg";
+				break;
+			case "ton":
+				ratioout = 1e-3;
+				reunit = "T";
+				break;
+			case "kn":
+				ratioout = 1e-2;
+				reunit = "kN";
+				break;
+			case "lb":
+				ratioout = 2.20462262;
+				reunit = "lb";
+				break;
+			}
+		wg = Math.floor(platevolume * Number(matl) * ratioin * ratioout * 1000)/1000;
+		estresult = wg + reunit;
+		$("#result").html(estresult);
+		}
+	}
+</script>
+</head>
+<body onload="init()">
+<table>
+<tr>
+	<td colspan="2">
+	Weight of PLATE Estimation for Different Materials
+	<hr>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+	<table>
+	<tr>
+		<td colspan="4">Unit (input)</td>
+	</tr>
+	<tr>
+		<td><input type="radio" name="unitin" value="mm" checked />millimetre</td>
+		<td><input type="radio" name="unitin" value="cm" />centimetre</td>
+		<td><input type="radio" name="unitin" value="m" />meter</td>
+		<td><input type="radio" name="unitin" value="inch" />inch</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+	<table>
+	<tr>
+		<td colspan="2">Dimensions (input)</td>
+	</tr>
+	<tr>
+		<td>Length (L) :</td><td><input type="text" name="leng"><span class="unitdisplayin">mm</span></td>
+	</tr>
+	<tr>
+		<td>Width (W) :</td><td><input type="text" name="widt"><span class="unitdisplayin">mm</span></td>
+	</tr>
+	<tr>
+		<td>Thickness (t) :</td><td><input type="text" name="heig"><span class="unitdisplayin">mm</span></td>
+	</tr>
+	</table>
+	</td>
+	<td valign="top" style="border-left: 2px solid #CCCCCC;">
+	<table>
+	<tr>
+		<td>Materials</td>
+	</tr>
+	<tr>
+		<td>
+		<select id="material">
+			<option value="7850">Steel</option>
+			<option value="2450">Concrete</option>
+			<option value="19320">Gold</option>
+			<option value="10490">Silver</option>
+			<option value="8930">Copper</option>
+			<option value="2579">Glass</option>
+		</select>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+	<hr>
+	<table>
+	<tr>
+		<td>
+		Unit (output)<br />
+		<input type="radio" name="unitout" value="kg" checked />Kilogram (kg)<br />
+		<input type="radio" name="unitout" value="ton" />Metric Ton (T)<br />
+		<input type="radio" name="unitout" value="kn" />KiloNewton (kN)<br />
+		<input type="radio" name="unitout" value="lb" />Pound (lb)<br />
+		</td>
+		<td align="left" style="width:150px; border-left: 2px solid #CCCCCC;">
+		RESULT ::<br/>
+		<div id="result">result</div>
+		</td>
+		<td align="center" style="border-left: 2px solid #CCCCCC;">
+		<input type="button" id="checkbtn" value="CAL" style="height:50px; width:50px;">
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+</body>
+</html>
